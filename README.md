@@ -1,154 +1,134 @@
-housing-data-manager-api
-Description
-Le projet Housing-Data-Manager-API est une API REST construite avec FastAPI permettant de gérer des données sur les logements. Il inclut :
+# housing-data-manager-api
 
-L'ajout et la récupération d'informations sur les maisons.
-L'analyse et la visualisation des données de logements avec Pandas, Matplotlib et Seaborn.
-Un modèle de prédiction basé sur Scikit-learn (RandomForestRegressor) pour estimer la valeur des maisons.
-Le projet utilise PostgreSQL avec SQLAlchemy pour la gestion des modèles et Alembic pour les migrations.
+## Description
 
-Installation
-Pré-requis
-Python 3.9 ou supérieur
-PostgreSQL installé et configuré
-Docker et Docker Compose (facultatif)
-Un gestionnaire de dépendances comme Poetry
-Étapes
-Clonez le dépôt GitHub :
+Le projet **Housing-Data-Manager-api** est une API REST construite avec **FastAPI** permettant de gérer des données sur les logements. Il est conçu pour effectuer des opérations de base sur des ensembles de données immobilières, comme l'ajout et la récupération d'informations sur les maisons. Le projet utilise une base de données PostgreSQL avec SQLAlchemy pour gérer les modèles et Alembic pour les migrations.
 
+---
+
+## Installation
+
+### Pré-requis
+- Python 3.9 ou supérieur
+- PostgreSQL installé et configuré
+- Un gestionnaire de dépendances comme **Poetry**
+
+### Étapes
+
+1. Clonez le dépôt GitHub :
+   
 bash
-Copier
-Modifier
-git clone https://github.com/votre-utilisateur/housing-api.git
-cd housing-api
-Créez et activez un environnement virtuel :
+   git clone https://github.com/votre-utilisateur/housing-api.git
+   cd housing-api
 
+
+2. Créez et activez un environnement virtuel :
+   
 bash
-Copier
-Modifier
-python -m venv env
-source env/bin/activate   # Sous Windows : .\env\Scripts\activate
-Installez les dépendances avec Poetry :
+   python -m venv env
+   source env/bin/activate   # Sous Windows : .\env\Scripts\activate
 
+
+3. Installez les dépendances avec Poetry :
+   
 bash
-Copier
-Modifier
-poetry install
-Configurez la base de données PostgreSQL :
+   poetry install
 
-Créez une base de données : housing.
-Modifiez la variable DATABASE_URL dans le fichier .env ou dans la configuration du docker-compose.yml.
-Appliquez les migrations :
 
+4. Configurez la base de données PostgreSQL :
+   - Créez une base de données : housing
+   - Modifiez la variable DATABASE_URL dans le fichier database.py ou utilisez une variable d'environnement.
+
+5. Appliquez les migrations :
+   
 bash
-Copier
-Modifier
-alembic upgrade head
-Lancez le serveur FastAPI :
+   alembic upgrade head
 
+
+6. Lancez le serveur FastAPI :
+   
 bash
-Copier
-Modifier
-uvicorn app.main:app --reload
-Accédez à la documentation interactive de l'API :
+   uvicorn app.main:app --reload
 
-Swagger UI : http://127.0.0.1:8000/docs
-ReDoc : http://127.0.0.1:8000/redoc
-Dockerisation de l'API
-Étape 1 : Dockerfile
+
+7. Accédez à la documentation interactive de l'API :
+   - Swagger UI : [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+   - Redoc : [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+---
+
+## Dockerisation de l'API
+
+Ce projet utilise **Docker** pour conteneuriser l'application et **Docker Compose** pour gérer les services. Voici les étapes pour exécuter l'API avec Docker.
+
+### Étape 1 : Dockerfile
 Le fichier Dockerfile configure l'environnement pour l'API. Il contient :
+- L'image Python 3.9.
+- L'installation des dépendances via **Poetry**.
+- Une commande pour appliquer les migrations automatiquement avant de démarrer le serveur.
 
-L'image Python 3.9.
-L'installation des dépendances via Poetry.
-Une commande pour appliquer les migrations automatiquement avant de démarrer le serveur.
-Étape 2 : docker-compose.yml
+### Étape 2 : docker-compose.yml
 Le fichier docker-compose.yml configure deux services :
+- **api** : Le service qui exécute l'API FastAPI.
+- **db** : Un service PostgreSQL pour la base de données.
 
-api : Le service qui exécute l'API FastAPI.
-db : Le service PostgreSQL pour la base de données.
-Étape 3 : Lancer les services avec Docker Compose
-Assurez-vous que Docker et Docker Compose sont installés.
-
-Exécutez la commande suivante pour construire les conteneurs et lancer les services :
-
+### Étape 3 : Lancer les services avec Docker Compose
+1. Assurez-vous que Docker et Docker Compose sont installés.
+2. Exécutez la commande suivante pour construire les conteneurs et lancer les services :
+   
 bash
-Copier
-Modifier
-docker-compose up --build
-Une fois les services lancés :
+   docker-compose up --build
 
-L'API est accessible sur http://127.0.0.1:8000.
-Les données PostgreSQL sont stockées de manière persistante dans un volume Docker.
-Fonctionnalités
-1. Gestion des données de maisons
-Ajouter et récupérer des informations sur les maisons via l'API.
-Structure des données :
-longitude, latitude
-housing_median_age, total_rooms, total_bedrooms, population, households
-median_income, median_house_value, ocean_proximity
-2. Analyse des données
-Chargement et exploration des données depuis un fichier CSV.
-Nettoyage des données et génération de visualisations (matrice de corrélation).
-3. Modèle d'inférence
-Entraînement d'un modèle de régression (RandomForestRegressor).
-Déploiement d'une API de prédiction.
-Sauvegarde et chargement du modèle avec Joblib.
-Structure du projet
-bash
-Copier
-Modifier
+3. Une fois les services lancés :
+   - L'API est accessible sur [http://127.0.0.1:8000](http://127.0.0.1:8000).
+   - Les données PostgreSQL sont stockées de manière persistante dans un volume Docker.
+
+### Points clés
+- Les migrations sont appliquées automatiquement lors du démarrage grâce à la commande alembic upgrade head dans le Dockerfile.
+- Les variables d'environnement (POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, DATABASE_URL) sont configurées dans le fichier docker-compose.yml.
+- Les données de PostgreSQL sont persistantes grâce au volume db_data.
+
+---
+## Structure du projet
+
 housing-api/
 │
 ├── app/
-│   ├── __init__.py       # Initialisation de l'application
-│   ├── main.py           # Point d'entrée de l'API
-│   ├── models.py         # Définition des modèles SQLAlchemy
-│   ├── schemas.py        # Définition des schémas Pydantic
-│   ├── database.py       # Configuration de la base de données
-│   ├── crud.py           # Opérations CRUD sur les données
-│   └── migrations/       # Fichiers de migration Alembic
+│   ├── __init__.py
+│   ├── main.py        # Point d'entrée de l'API
+│   ├── models.py      # Définition des modèles SQLAlchemy
+│   ├── schemas.py     # Définition des schémas Pydantic
+│   ├── database.py    # Configuration de la base de données
+│   ├── crud.py        # Logique CRUD pour interagir avec la base
+│   └── migrations/    # Fichiers de migration Alembic
 │
-├── Dockerfile            # Configuration du conteneur pour l'API principale
-├── docker-compose.yml    # Orchestration des services Docker
-├── pyproject.toml        # Configuration de Poetry
-├── README.md             # Documentation du projet
-└── .env                  # Variables d'environnement
-Services supplémentaires
-Analyse des données (analysis.py)
-Nettoie les données d'un fichier CSV (data/housing.csv).
-Génère une matrice de corrélation et enregistre les données nettoyées dans data/housing_clean.csv.
-Modèle d'inférence (train_model.py et predict_api.py)
-train_model.py
-Entraîne un modèle de régression pour prédire la valeur des maisons.
-Sauvegarde le modèle et les colonnes d’entraînement dans le dossier model/.
-predict_api.py
-Charge le modèle entraîné.
-Fournit une route /predict permettant de faire des prédictions via une requête POST.
-Contribution
-Les contributions sont les bienvenues ! Si vous souhaitez contribuer, suivez ces étapes :
+├── Dockerfile         # Configuration du conteneur pour l'API
+├── docker-compose.yml # Orchestration des services Docker
+├── alembic.ini        # Configuration d'Alembic
+├── pyproject.toml     # Configuration de Poetry
+├── README.md          # Documentation du projet
+└── env/               # Environnement virtuel (non inclus dans Git)
 
-Forkez le projet :
 
+---
+
+## Contribution
+
+Les contributions sont les bienvenues ! Si vous souhaitez contribuer :
+1. Forkez le projet
+2. Créez une branche pour votre fonctionnalité :
+   
 bash
-Copier
-Modifier
-git clone https://github.com/votre-utilisateur/housing-api.git
-Créez une branche pour votre fonctionnalité :
+   git checkout -b nouvelle-fonctionnalite
 
+3. Faites vos modifications et validez-les :
+   
 bash
-Copier
-Modifier
-git checkout -b nouvelle-fonctionnalite
-Faites vos modifications et validez-les :
+   git commit -m "Ajout d'une nouvelle fonctionnalité"
 
+4. Poussez votre branche :
+   
 bash
-Copier
-Modifier
-git commit -m "Ajout d'une nouvelle fonctionnalité"
-Poussez votre branche :
+   git push origin nouvelle-fonctionnalite
 
-bash
-Copier
-Modifier
-git push origin nouvelle-fonctionnalite
-Créez une Pull Request sur GitHub.
+5. Créez une Pull Request sur GitHub
