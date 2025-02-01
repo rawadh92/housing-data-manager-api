@@ -1,5 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from app import models, schemas, database, crud
+from models import House
+from schemas import HouseCreate
+
 
 app = FastAPI()
 

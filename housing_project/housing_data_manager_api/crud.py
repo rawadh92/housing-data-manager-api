@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from app import models, schemas
-from app.database import SessionLocal
+from database import SessionLocal
+from models import House
+from schemas import HouseCreate
 
 def get_houses():
     session = SessionLocal()
