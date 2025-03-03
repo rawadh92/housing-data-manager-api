@@ -1,0 +1,74 @@
+# Nettoyer et reconstruire tout le projet
+
+docker-compose down -v  # Arrête et supprime tous les conteneurs et volumes
+docker-compose up --build  # Rebuild et démarre tous les services
+
+# Vérifier que tous les conteneurs sont bien en cours d'exécution
+docker ps
+
+# Tester l'API Flask (Housing API)
+
+## Vérifier si l'API est accessible
+curl http://localhost:8000/houses
+
+## Ajouter une maison
+curl -X POST -H "Content-Type: application/json" -d '{
+  "longitude": -122.23,
+  "latitude": 37.88,
+  "housing_median_age": 41,
+  "total_rooms": 880,
+  "total_bedrooms": 129,
+  "population": 322,
+  "households": 126,
+  "median_income": 8.3252,
+  "median_house_value": 452600.0,
+  "ocean_proximity": "NEAR BAY"
+}' http://localhost:8000/houses
+
+## Vérifier que les données sont bien enregistrées
+curl http://localhost:8000/houses
+
+# Tester Kafka (Producer & Consumer)
+
+docker-compose exec consumer python producer.py  # Envoyer un message avec Kafka Producer
+docker-compose logs -f consumer  # Vérifier que le Consumer récupère bien le message
+
+# Tester le modèle Machine Learning
+
+## Vérifier si le service est accessible
+curl http://localhost:8002
+
+## Faire une prédiction
+curl -X POST -H "Content-Type: application/json" -d '{
+  "longitude": -122.23,
+  "latitude": 37.88,
+  "housing_median_age": 41,
+  "total_rooms": 880,
+  "total_bedrooms": 129,
+  "population": 322,
+  "households": 126,
+  "median_income": 8.3252
+}' http://localhost:8002/predict
+
+# Debugging
+
+## Voir les logs de tous les services
+docker-compose logs -f
+
+## Voir les logs d'un service spécifique
+docker-compose logs -f api
+docker-compose logs -f consumer
+docker-compose logs -f model
+
+## Accéder à un conteneur en ligne de commande
+docker exec -it housing_api /bin/sh
+docker exec -it housing_consumer /bin/sh
+docker exec -it housing_model /bin/sh
+
+## Redémarrer un service spécifique
+docker-compose restart api
+docker-compose restart consumer
+docker-compose restart model
+
+# Arrêter et supprimer tout proprement
+docker-compose down -v
